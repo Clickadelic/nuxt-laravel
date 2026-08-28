@@ -20,7 +20,7 @@ The local backend uses the MySQL service from Docker Compose. Its development da
 
 ## GitHub Actions deployment
 
-The workflows support `main` and `master` as production branches. CI checks the `frontend` and `backend` projects independently. Deployment generates a static Nuxt site and uploads it to webgo over SSH, then uploads Laravel separately.
+The workflows use `prod` as the production branch. CI checks the `frontend` and `backend` projects independently. Deployment generates a static Nuxt site and uploads it to webgo over SSH, then uploads Laravel separately.
 
 Configure these production environment secrets in GitHub:
 
