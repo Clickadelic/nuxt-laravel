@@ -8,3 +8,10 @@ Route::get('/health', function () {
 		'service' => 'laravel',
 	]);
 });
+
+Route::get('/hello-world', function () {
+	return response()->json([
+		'status' => 'ok',
+		'service' => 'hello world is here',
+	]);
+});
