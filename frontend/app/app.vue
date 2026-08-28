@@ -28,6 +28,6 @@ onMounted(async () => {
 </template>
 <style>
 h1 {
-	color: red;
+	color: green;
 }
 </style>
