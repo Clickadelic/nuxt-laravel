@@ -74,7 +74,6 @@ jobs:
               run: |
                   test -n '${{ secrets.DEPLOY_HOST }}'
                   test -n '${{ secrets.DEPLOY_USER }}'
-                  test -n '${{ secrets.DEPLOY_ENV_FILE_B64 }}'
                   test -n '${{ secrets.DEPLOY_FRONTEND_PATH }}'
                   test -n '${{ secrets.DEPLOY_BACKEND_PATH }}'
 
@@ -113,21 +112,6 @@ jobs:
                     backend/ \
                     '${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_BACKEND_PATH }}/'
 
-            - name: Upload Laravel environment
-              shell: bash
-              env:
-                  ENV_FILE_B64: ${{ secrets.DEPLOY_ENV_FILE_B64 }}
-              run: |
-                  set -euo pipefail
-                  echo "$ENV_FILE_B64" | base64 --decode > backend/.env
-                  PORT='${{ secrets.DEPLOY_PORT }}'
-                  PORT="${PORT:-22}"
-                  rsync -az \
-                    -e "ssh -i $HOME/.ssh/webgo_deploy -p $PORT" \
-                    backend/.env \
-                    '${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_BACKEND_PATH }}/.env'
-                  rm -f backend/.env
-
             - name: Run Laravel deployment commands
               shell: bash
               run: |
@@ -139,6 +123,7 @@ jobs:
                     "cd '${{ secrets.DEPLOY_BACKEND_PATH }}' && \
                      mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache; \
                      php artisan config:clear; \
+                     php artisan db:show --database=mysql; \
                      php artisan migrate --force; \
                      php artisan config:cache; \
                      php artisan route:cache"

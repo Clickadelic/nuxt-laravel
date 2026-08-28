@@ -28,11 +28,10 @@ Configure these production environment secrets in GitHub:
 - `DEPLOY_PORT` (optional, defaults to `22`)
 - `DEPLOY_USER`
 - `DEPLOY_SSH_PRIVATE_KEY_B64`
-- `DEPLOY_ENV_FILE_B64` (base64-encoded production Laravel `.env`)
 - `DEPLOY_FRONTEND_PATH` (the document root for `gitis.tobias-hopp.de`)
 - `DEPLOY_BACKEND_PATH` (a non-public PHP-capable path)
 
-The production Laravel environment uploaded through `DEPLOY_ENV_FILE_B64` must use MySQL settings supplied by webgo, including `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`.
+Upload the production Laravel `.env` directly to `DEPLOY_BACKEND_PATH` on the server. The deployment preserves that file and uses its MySQL settings, including `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`.
 
 The web server must map `/api` on the subdomain to Laravel's `backend/public/index.php`, or provide a separate API host and set `NUXT_PUBLIC_API_BASE` accordingly. Standard webspace should not be assumed to run Docker; the local Compose setup remains for development.
 
