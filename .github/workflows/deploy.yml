@@ -120,7 +120,9 @@ jobs:
                   PORT="${PORT:-22}"
                   ssh -i "$HOME/.ssh/webgo_deploy" -p "$PORT" \
                     '${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}' \
-                    "cd '${{ secrets.DEPLOY_BACKEND_PATH }}' && \
+                    "set -eu; \
+                     cd '${{ secrets.DEPLOY_BACKEND_PATH }}'; \
+                     test -f .env; \
                      mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache; \
                      php artisan config:clear; \
                      php artisan db:show --database=mysql; \
