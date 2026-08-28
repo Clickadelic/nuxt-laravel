@@ -16,6 +16,26 @@ Open:
 
 The source folders are bind-mounted for development. Docker named volumes preserve `node_modules`, Nuxt's generated files, and Laravel's Composer dependencies inside the containers.
 
+The local backend uses the MySQL service from Docker Compose. Its development database is `laravel`, with username `laravel` and password `laravel`. The database data is stored in the `mysql_data` named volume.
+
+## GitHub Actions deployment
+
+The workflows support `main` and `master` as production branches. CI checks the `frontend` and `backend` projects independently. Deployment generates a static Nuxt site and uploads it to webgo over SSH, then uploads Laravel separately.
+
+Configure these production environment secrets in GitHub:
+
+- `DEPLOY_HOST`
+- `DEPLOY_PORT` (optional, defaults to `22`)
+- `DEPLOY_USER`
+- `DEPLOY_SSH_PRIVATE_KEY_B64`
+- `DEPLOY_ENV_FILE_B64` (base64-encoded production Laravel `.env`)
+- `DEPLOY_FRONTEND_PATH` (the document root for `gitis.tobias-hopp.de`)
+- `DEPLOY_BACKEND_PATH` (a non-public PHP-capable path)
+
+The production Laravel environment uploaded through `DEPLOY_ENV_FILE_B64` must use MySQL settings supplied by webgo, including `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`.
+
+The web server must map `/api` on the subdomain to Laravel's `backend/public/index.php`, or provide a separate API host and set `NUXT_PUBLIC_API_BASE` accordingly. Standard webspace should not be assumed to run Docker; the local Compose setup remains for development.
+
 ## Stop the stack
 
 ```powershell

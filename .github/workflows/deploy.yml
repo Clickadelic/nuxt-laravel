@@ -1,184 +1,144 @@
-name: Deploy webdev-hq.com
+name: Deploy gitis.tobias-hopp.de
 
 on:
-  push:
-    branches: ["production"]
-  workflow_dispatch:
+    push:
+        branches: [main, master]
+    workflow_dispatch:
 
 concurrency:
-  group: deploy-webdev-hq-production
-  cancel-in-progress: true
+    group: deploy-gitis-production
+    cancel-in-progress: true
 
 permissions:
-  contents: read
+    contents: read
 
 env:
-  NODE_VERSION: "20"
-  PHP_VERSION: "8.4"
+    NODE_VERSION: "22"
+    PHP_VERSION: "8.4"
 
 jobs:
-  deploy:
-    if: ${{ github.ref == 'refs/heads/production' }}
-    runs-on: ubuntu-latest
-    environment: production
+    deploy:
+        runs-on: ubuntu-latest
+        environment: production
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-    steps:
-      # 1. Code auschecken
-      - name: Checkout
-        uses: actions/checkout@v4
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+                  cache-dependency-path: frontend/package-lock.json
 
-      # 2. PHP einrichten
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          extensions: mbstring, bcmath, xml, curl, pdo, tokenizer
-          coverage: none
+            - name: Build static Nuxt frontend
+              working-directory: frontend
+              run: |
+                  npm ci
+                  npm run generate
 
-      # 3. Composer Cache einrichten
-      - name: Cache Composer
-        uses: actions/cache@v4
-        with:
-          path: vendor
-          key: composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: composer-
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+                  extensions: mbstring, bcmath, xml, curl, pdo_mysql
+                  coverage: none
+                  tools: composer:v2
 
-      # 4. Composer-Abhängigkeiten installieren
-      - name: Install Composer dependencies
-        run: composer install --no-dev --prefer-dist --optimize-autoloader
+            - name: Install production Laravel dependencies
+              working-directory: backend
+              run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-      # 5. Node.js einrichten
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
+            - name: Write SSH key
+              shell: bash
+              env:
+                  KEY_B64: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY_B64 }}
+              run: |
+                  set -euo pipefail
+                  test -n "$KEY_B64"
+                  install -m 700 -d "$HOME/.ssh"
+                  echo "$KEY_B64" | base64 --decode > "$HOME/.ssh/webgo_deploy"
+                  chmod 600 "$HOME/.ssh/webgo_deploy"
+                  ssh-keygen -lf "$HOME/.ssh/webgo_deploy" >/dev/null
 
-      # 6. Node-Dependencies installieren
-      - name: Install Node dependencies
-        run: npm ci || (rm -f package-lock.json && npm install)
+            - name: Add SSH host key
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  PORT='${{ secrets.DEPLOY_PORT }}'
+                  PORT="${PORT:-22}"
+                  ssh-keyscan -p "$PORT" -H '${{ secrets.DEPLOY_HOST }}' >> "$HOME/.ssh/known_hosts"
 
-      # 7. Vite Build (inkl. Wayfinder types)
-      - name: Build assets with Vite
-        env:
-          VITE_API_VERSION: ${{ vars.VITE_API_VERSION || 'v1' }}
-          # Verhindert den Datenbank-Fehler während des Bootstrapping
-          DB_CONNECTION: sqlite
-          DB_DATABASE: ":memory:"
-          # Ein Fallback-Key, falls Laravel beim Booten einen verlangt
-          APP_KEY: base64:u8vS6Yx9f9vH9Z9z9y9x9w9v9u9t9s9r9q9p9o9n9m=
-        run: npm run build
+            - name: Verify deployment configuration
+              shell: bash
+              run: |
+                  test -n '${{ secrets.DEPLOY_HOST }}'
+                  test -n '${{ secrets.DEPLOY_USER }}'
+                  test -n '${{ secrets.DEPLOY_ENV_FILE_B64 }}'
+                  test -n '${{ secrets.DEPLOY_FRONTEND_PATH }}'
+                  test -n '${{ secrets.DEPLOY_BACKEND_PATH }}'
 
-      # 8. SSH Key für Deployment schreiben
-      - name: Write SSH key (base64 secret)
-        shell: bash
-        env:
-          KEY_B64: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY_B64 }}
-        run: |
-          set -euo pipefail
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
-          KEY="$HOME/.ssh/web_deploy_key"
-          if [ -z "$KEY_B64" ]; then
-            echo "::error title=Missing secret::DEPLOY_SSH_PRIVATE_KEY_B64 is not set"
-            exit 1
-          fi
-          echo "$KEY_B64" | base64 -d > "$KEY"
-          chmod 600 "$KEY"
-          ssh-keygen -lf "$KEY" >/dev/null
+            - name: Ensure remote directories exist
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  PORT='${{ secrets.DEPLOY_PORT }}'
+                  PORT="${PORT:-22}"
+                  ssh -i "$HOME/.ssh/webgo_deploy" -p "$PORT" \
+                    '${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}' \
+                    "mkdir -p '${{ secrets.DEPLOY_FRONTEND_PATH }}' '${{ secrets.DEPLOY_BACKEND_PATH }}'"
 
-      # 9. SSH Known Hosts hinzufügen
-      - name: Add host key
-        shell: bash
-        run: |
-          set -euo pipefail
-          HOST="${{ secrets.DEPLOY_HOST }}"
-          PORT="${{ secrets.DEPLOY_PORT }}"; [ -z "$PORT" ] && PORT=22
-          ssh-keyscan -p "$PORT" -t rsa,ed25519 -H "$HOST" >> "$HOME/.ssh/known_hosts" 2>/dev/null
+            - name: Upload frontend
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  PORT='${{ secrets.DEPLOY_PORT }}'
+                  PORT="${PORT:-22}"
+                  rsync -az --delete \
+                    -e "ssh -i $HOME/.ssh/webgo_deploy -p $PORT" \
+                    frontend/.output/public/ \
+                    '${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_FRONTEND_PATH }}/'
 
-      # 10. SSH Connectivity testen
-      - name: Probe SSH connectivity
-        shell: bash
-        run: |
-          set -euo pipefail
-          PORT="${{ secrets.DEPLOY_PORT }}"; [ -z "$PORT" ] && PORT=22
-          ssh -i "$HOME/.ssh/web_deploy_key" \
-            -o BatchMode=yes \
-            -o StrictHostKeyChecking=yes \
-            -o IdentitiesOnly=yes \
-            -p "$PORT" \
-            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" echo ok
+            - name: Upload Laravel application
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  PORT='${{ secrets.DEPLOY_PORT }}'
+                  PORT="${PORT:-22}"
+                  rsync -az --delete \
+                    --exclude=.env \
+                    --exclude=storage/logs \
+                    --exclude=tests \
+                    -e "ssh -i $HOME/.ssh/webgo_deploy -p $PORT" \
+                    backend/ \
+                    '${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_BACKEND_PATH }}/'
 
-      # 11. Remote-Verzeichnis sicherstellen
-      - name: Ensure remote directory exists
-        shell: bash
-        run: |
-          set -euo pipefail
-          PORT="${{ secrets.DEPLOY_PORT }}"; [ -z "$PORT" ] && PORT=22
-          ssh -i "$HOME/.ssh/web_deploy_key" \
-            -o BatchMode=yes \
-            -o StrictHostKeyChecking=yes \
-            -o IdentitiesOnly=yes \
-            -p "$PORT" \
-            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "mkdir -p \"${{ secrets.DEPLOY_PATH }}\""
+            - name: Upload Laravel environment
+              shell: bash
+              env:
+                  ENV_FILE_B64: ${{ secrets.DEPLOY_ENV_FILE_B64 }}
+              run: |
+                  set -euo pipefail
+                  echo "$ENV_FILE_B64" | base64 --decode > backend/.env
+                  PORT='${{ secrets.DEPLOY_PORT }}'
+                  PORT="${PORT:-22}"
+                  rsync -az \
+                    -e "ssh -i $HOME/.ssh/webgo_deploy -p $PORT" \
+                    backend/.env \
+                    '${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_BACKEND_PATH }}/.env'
+                  rm -f backend/.env
 
-      # 12. Upload der App (rsync — mirrors git state, removes deleted files)
-      - name: Upload app (rsync)
-        shell: bash
-        run: |
-          set -euo pipefail
-          PORT="${{ secrets.DEPLOY_PORT }}"; [ -z "$PORT" ] && PORT=22
-          rsync -az --delete \
-            --exclude=.git \
-            --exclude=.github \
-            --exclude=node_modules \
-            --exclude=vendor \
-            --exclude=tests \
-            --exclude=storage \
-            --exclude=.env \
-            --exclude=x-files \
-            -e "ssh -i $HOME/.ssh/web_deploy_key -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -p $PORT" \
-            ./ \
-            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}/"
-
-      # 13. Remote Deployment: Composer, Artisan, Caches
-      - name: Run remote deploy (Composer + Artisan)
-        shell: bash
-        run: |
-          set -euo pipefail
-          PORT="${{ secrets.DEPLOY_PORT }}"; [ -z "$PORT" ] && PORT=22
-          ssh -i "$HOME/.ssh/web_deploy_key" \
-            -o BatchMode=yes \
-            -o StrictHostKeyChecking=yes \
-            -o IdentitiesOnly=yes \
-            -p "$PORT" \
-            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" << 'EOF'
-          set -e
-          cd "${{ secrets.DEPLOY_PATH }}"
-
-          # Sicherstellen der Ordner
-          mkdir -p storage bootstrap/cache resources/views
-
-          # env-Datei
-          [ -f .env ] || cp .env.example .env
-
-          # Entferne evtl. veraltete Cache-Dateien, ohne die App zu booten
-          rm -f bootstrap/cache/*.php || true
-
-          # Composer installieren (führt package:discover aus)
-          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-
-          # Jetzt Artisan-Befehle ausführen
-          php artisan config:clear
-          php artisan view:clear || true
-          php artisan wayfinder:generate
-          php artisan key:generate --force || true
-          php artisan migrate --force
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache || true
-          php artisan storage:link || true
-
-          chmod -R ug+rwx storage bootstrap/cache || true
-          EOF
+            - name: Run Laravel deployment commands
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  PORT='${{ secrets.DEPLOY_PORT }}'
+                  PORT="${PORT:-22}"
+                  ssh -i "$HOME/.ssh/webgo_deploy" -p "$PORT" \
+                    '${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}' \
+                    "cd '${{ secrets.DEPLOY_BACKEND_PATH }}' && \
+                     mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache; \
+                     php artisan config:clear; \
+                     php artisan migrate --force; \
+                     php artisan config:cache; \
+                     php artisan route:cache"
