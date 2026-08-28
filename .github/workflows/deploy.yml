@@ -2,7 +2,7 @@ name: Deploy gitis.tobias-hopp.de
 
 on:
     push:
-        branches: [main, master]
+        branches: [prod]
     workflow_dispatch:
 
 concurrency:
