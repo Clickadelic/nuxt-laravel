@@ -26,6 +26,9 @@ services:
         ports:
             - "8000:8000"
         environment:
+            APP_ENV: local
+            APP_DEBUG: true
+            APP_KEY: base64:o/8godfskGnTyeK4U1zNs9CQ1/1nDYxuKrGyQ/BxNDI=
             APP_URL: http://localhost:8000
             DB_CONNECTION: mysql
             DB_HOST: mysql
@@ -33,6 +36,7 @@ services:
             DB_DATABASE: laravel
             DB_USERNAME: laravel
             DB_PASSWORD: laravel
+            SESSION_DRIVER: file
         volumes:
             - ./backend:/var/www/html
             - backend_vendor:/var/www/html/vendor
