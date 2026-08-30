@@ -1,0 +1,12 @@
+<template>
+	<div>
+		<header>
+			<h1>Logo</h1>
+			<nav>
+				<ul>
+					<li><NuxtLink to="/dashboard">Dashboard</NuxtLink></li>
+				</ul>
+			</nav>
+		</header>
+	</div>
+</template>
