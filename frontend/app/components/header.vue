@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="wrap-header">
 		<header class="header">
 			<h1>Logo</h1>
 			<nav>
