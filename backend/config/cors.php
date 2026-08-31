@@ -11,7 +11,7 @@ return [
 
 	'allowed_origins' => [
 		'http://localhost:3000',
-		'https://gitis.tobias-hopp.de',
+		'https://demo.tobias-hopp.de',
 	],
 
 	'allowed_origins_patterns' => [],
