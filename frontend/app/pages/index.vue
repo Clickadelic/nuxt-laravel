@@ -1,31 +1,20 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-
-const config = useRuntimeConfig();
-const result = ref<string>();
-const error = ref<string>();
-
-onMounted(async () => {
-	try {
-		const response = await fetch(`${config.public.apiBase}/hello-world`);
-		if (!response.ok) {
-			throw new Error(`Request failed with status ${response.status}`);
-		}
-
-		const payload = await response.json();
-		result.value = payload.service;
-	} catch (requestError) {
-		error.value = requestError instanceof Error ? requestError.message : "Request failed";
-	}
-});
+console.log("Index page loaded");
 </script>
 
 <template>
-	<section class="container">
-		<h1>Hello Gitis</h1>
-		<h2>{{ config.public.apiBase }}</h2>
-		<p v-if="result">{{ result }}</p>
-		<p v-else-if="error">{{ error }}</p>
-		<p v-else>Loading...</p>
-	</section>
+	<main class="container home-page">
+		<h2>Home</h2>
+	</main>
 </template>
+
+<style scoped>
+.home-page {
+	min-height: 50vh;
+	padding: 2rem 0;
+}
+
+.home-page h2 {
+	font-size: 2rem;
+}
+</style>

@@ -37,7 +37,7 @@ body {
 	background: var(--gray-light);
 	font-family: "Rubik", sans-serif;
 	font-size: 1.125rem;
-	color: var(--eighteen);
+	color: var(--primary);
 }
 
 .container {
@@ -53,13 +53,34 @@ a {
 .btn {
 	border-radius: 1rem;
 	border: 0;
-	padding: 0.5rem 1rem;
+	padding: 0.75rem 1.125rem;
 	font-size: 2rem;
 	font-weight: bold;
 }
 
 .btn-primary {
-	width: 350px;
+	width: 320px;
 	color: var(--secondary);
 	background: linear-gradient(var(--accent-first), var(--accent-second));
+}
+
+.btn-primary:hover {
+	background: linear-gradient(var(--accent-second), var(--highlight));
+}
+
+main {
+	min-height: 50vh;
+}
+
+input {
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	border: 1px solid var(--gray);
+	border-radius: 0.25rem;
+}
+
+input:focus {
+	outline: none;
+	border-color: var(--secondary);
 }
