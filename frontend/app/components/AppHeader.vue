@@ -29,7 +29,7 @@ import AppNavigation from './AppNavigation.vue';
 	justify-content: space-between;
 	padding: 1rem 2rem;
 	width: 1440px;
-	margin: 0 auto 5rem auto;
+	margin: 0 auto 8rem auto;
 	background: var(--white);
 	border-radius: 4rem;
 	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
