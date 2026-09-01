@@ -2,7 +2,7 @@
 	<section class="hero-section">
 		<h2>Die beste Art Software zu nutzen ist, wenn Sie Dir gehört.</h2>
 		<Icon name="gitis-icon:developer-activity-bro.svg" size="24px" />
-		<NuxtLink class="btn btn-primary" to="/angebot">Angebot anfordern</NuxtLink>
+		<NuxtLink class="btn btn-primary" to="/">Angebot anfordern</NuxtLink>
 	</section>
 </template>
 
