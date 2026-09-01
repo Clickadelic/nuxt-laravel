@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const route = useRoute();
 
-const title = route.meta.authTitle as string;
-const subtitle = route.meta.authSubtitle as string;
+const title = computed(() => route.meta.authTitle as string);
+const subtitle = computed(() => route.meta.authSubtitle as string);
 </script>
 
 <template>
