@@ -1,13 +1,14 @@
 <template>
 	<section class="hero-section">
-		<h2>Die beste Art Software zu nutzen ist, wenn Sie Dir gehört.</h2>
-		<Icon name="gitis-icon:developer-activity-bro.svg" size="24px" />
-		<NuxtLink class="btn btn-primary" to="/">Angebot anfordern</NuxtLink>
+		<div class="hero-content">
+			<h2>Die beste Art Software zu nutzen ist, wenn Sie Dir gehört.</h2>
+			<NuxtLink class="btn btn-primary" to="/">Angebot anfordern</NuxtLink>
+		</div>
+		<img src="~/assets/images/svg/developer-activity-bro.svg" alt="Developer Activity" />
 	</section>
 </template>
 
 <style scoped>
-
 .hero-section {
 	font-size: 2rem;
 	color: var(--white);
@@ -21,5 +22,12 @@
 h2 {
 	color: var(--white);
 	font-size: 52px;
+}
+
+.hero-content {
+	padding-top: 5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
 }
 </style>

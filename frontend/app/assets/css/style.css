@@ -59,7 +59,7 @@ a {
 }
 
 .btn-primary {
-	width: 320px;
+	width: 350px;
 	color: var(--secondary);
 	background: linear-gradient(var(--accent-first), var(--accent-second));
 }
