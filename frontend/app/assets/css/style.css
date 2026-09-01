@@ -8,7 +8,7 @@
 	--white: #fff;
 	--black: #000;
 	--gray: #626262;
-	--gray-one: #f4f5f6;
+	--gray-light: #f4f5f6;
 	--primary: #3a6258;
 	--secondary: #2c3f5a;
 	--gradient-first: #3e6b50;
@@ -34,7 +34,7 @@ button {
 }
 
 body {
-	background: var(--gray-one);
+	background: var(--gray-light);
 	font-family: "Rubik", sans-serif;
 	font-size: 1.125rem;
 	color: var(--eighteen);
@@ -59,7 +59,7 @@ a {
 }
 
 .btn-primary {
-	width: 320px;
+	width: 350px;
 	color: var(--secondary);
 	background: linear-gradient(var(--accent-first), var(--accent-second));
 }
