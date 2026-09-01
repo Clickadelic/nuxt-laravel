@@ -22,7 +22,6 @@ onMounted(async () => {
 
 <template>
 	<section class="container">
-		<h1>Hello Gitis</h1>
 		<h2>{{ config.public.apiBase }}</h2>
 		<p v-if="result">{{ result }}</p>
 		<p v-else-if="error">{{ error }}</p>
