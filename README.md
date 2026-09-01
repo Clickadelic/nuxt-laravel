@@ -28,7 +28,7 @@ Configure these production environment secrets in GitHub:
 - `DEPLOY_PORT` (optional, defaults to `22`)
 - `DEPLOY_USER`
 - `DEPLOY_SSH_PRIVATE_KEY_B64`
-- `DEPLOY_FRONTEND_PATH` (the document root for `gitis.tobias-hopp.de`)
+- `DEPLOY_FRONTEND_PATH` (the document root for `demo.tobias-hopp.de`)
 - `DEPLOY_BACKEND_PATH` (a non-public PHP-capable path)
 
 Upload the production Laravel `.env` directly to `DEPLOY_BACKEND_PATH` on the server. The deployment preserves that file and uses its MySQL settings, including `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`.

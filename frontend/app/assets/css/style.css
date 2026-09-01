@@ -5,101 +5,61 @@
 }
 
 :root {
+	--white: #fff;
+	--black: #000;
+	--gray: #626262;
+	--gray-one: #f4f5f6;
 	--primary: #3a6258;
-	--six: #376c55;
-	--seven: #325c52;
-	--nine: #366c54;
-	--ten: #396258;
-	--eighteen: #2c4831;
-	--twelve: #719579;
-	--twentyseven: #6eac9c;
-	--twentynine: #51736a;
-	--thirtyseven: #74bc74;
-	--thirtyone: #7faa8f;
-	--thirtynine: #447a62;
-	--fourtyone: #86b095;
-	--fourtytwo: #84b776;
-	--fourtyseven: #63b477;
-	--fourtyeight: #5ca894;
-	--fourtynine: #3a7058;
-	--fiftyone: #94bd99;
-	--fiftytwo: #75a28a;
-	--fiftnine: #366c55;
-	--sixtyone: #7ea48d;
-	--sixtytwo: #8cbd7b;
-	--sixtythree: #5a8572;
-	--sixtyseven: #6c8b7b;
-	--sixtyeight: #54845e;
-	--seventyone: #8dba84;
-	--seventyseven: #467a5b;
-	
-	--secondary: #eef4ef;
-	--tertiary: #eef7ea;
-	--quarternary: #deebdc;
-	--eight: #f4fbf1;
-	--eleven: #cadac7;
+	--secondary: #2c3f5a;
+	--gradient-first: #3e6b50;
+	--gradient-second: #314559;
+	--accent-first: #acf08a;
+	--accent-second: #caed70;
+	--highlight: #e37368;
+}
 
-	--thirteen: #c0e973;
-
-	--fourteen: #6c8274;
-	--fivteen: #2d3138;
-	--sixteen: #8ea8ae;
-	--seventeen: #697b89;
-	--nineteen: #415a5a;
-	--twenty: #eff6f1;
-	--twentyone: #91989d;
-	--twentytwo: #c1aaa0;
-	--twentythree: #c3cbce;
-	--thirty: #eef8eb;
-	--fourty: #eff7ec;
-	--fifty: #e9f5e8;
-	--twentyfour: #82726c;
-	--twentyfive: #8f8271;
-	--twentysix: #dec2a6;
-	--twentyeight: #7094b4;
-	--thirtytwo: #e37368;
-	--thirtythree: #bac96f;
-	--thirtyfour: #c0d0ca;
-	--thirtyfive: #c8d396;
-	--thirtysix: #caa9a7;
-	--thirtyeight: #7088a4;
-	--seventythree: #597c71;
-	--fourtyfour: #757e89;
-	--fourtyfive: #b9babc;
-	--fourtysix: #bacebd;
-	--fiftythree: #2b3547;
-	--fiftyfour: #99adac;
-	--fiftyfive: #738685;
-	--fourtythree: #bdd594;
-	--fiftysix: #b3d582;
-	--seventynine: #9ad86e;
-	--fiftyseven: #637384;
-	--fiftyeight: #b0948c;
-	--seventy: #ebf2e9;
-	--seventyeight: #f4fbf2;
-	--sixty: #b5cec0;
-	--sixtyfour: #94b4ac;
-	--sixtysix: #2c2c2c;
-	--sixtynine: #6e8c84;
-	--seventytwo: #9c9c9c;
-	--seventyfour: #94acac;
-	--seventyfive: #708385;
-	--seventysix: #6c7e79;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+code,
+a,
+li,
+button {
+	font-size: 1rem;
 }
 
 body {
-	background: #f4f5f6;
+	background: var(--gray-one);
+	font-family: "Rubik", sans-serif;
+	font-size: 1.125rem;
+	color: var(--eighteen);
 }
 
-.wrap-header {
-	background-color: var(--thirtyfour);
-}
-
-header.header {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	padding: 1rem;
-	width: 1280px;
+.container {
+	max-width: 1440px;
 	margin: 0 auto;
+	padding: 0 2rem;
+}
+
+a {
+	text-decoration: none;
+}
+
+.btn {
+	border-radius: 1rem;
+	border: 0;
+	padding: 0.5rem 1rem;
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.btn-primary {
+	width: 320px;
+	color: var(--secondary);
+	background: linear-gradient(var(--accent-first), var(--accent-second));
 }
