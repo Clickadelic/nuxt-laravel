@@ -7,18 +7,21 @@ definePageMeta({
 	<section class="auth-section">
 		<div class="auth-header">
 			<AppLogo />
-			<h3>Registrierung</h3>
+			<h3>Erstelle einen Account</h3>
+			<h4>Registrieren</h4>
 		</div>
 		<form>
 			<input type="text" placeholder="Username" />
-			<input type="password" placeholder="Password" />
+			<input type="email" placeholder="E-Mail Adresse" />
+			<input type="password" placeholder="Passwort" />
 			<button type="submit">Registrieren</button>
 		</form>
 	</section>
 </template>
 <style>
 .auth-section {
-	min-height: 100vh;
+
+	max-width: 400px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

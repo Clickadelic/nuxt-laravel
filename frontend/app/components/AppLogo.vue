@@ -13,6 +13,8 @@ a:link,
 a:visited {
 	font-weight: normal;
 	font-size: 2rem;
+	color: var(--primary);
+	font-style:italic;
 	text-decoration: none;
 }
 
