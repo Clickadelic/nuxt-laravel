@@ -9,13 +9,13 @@ export default defineNuxtConfig({
 		}
 	},
 
-	css: ["~/assets/css/style.css", "~/assets/css/google-fonts.css"],
+	css: ["~/assets/css/style.css", "~/assets/css/google-fonts.css", "~/assets/css/gitis-colors.css"],
 	modules: ["@nuxt/icon"],
 	icon: {
 		customCollections: [
 			{
-				prefix: "gitis-icon", // Das wird dein Präfix im Code
-				dir: "./assets/images/svg" // Pfad zu deinem Ordner
+				prefix: "gitis-icon", // Code-Prefix for Icons
+				dir: "./app/assets/images/svg" // path to folder (since V4 [app directory introduced])
 			}
 		]
 	},
@@ -27,4 +27,4 @@ export default defineNuxtConfig({
 			}
 		}
 	}
-})
+});

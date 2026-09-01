@@ -1,17 +1,65 @@
+<script setup lang="ts">
+const route = useRoute();
+
+const title = route.meta.authTitle as string;
+const subtitle = route.meta.authSubtitle as string;
+</script>
+
 <template>
 	<div class="auth-layout">
-		<slot />
+		<section class="auth-section">
+			<div class="auth-header">
+				<AppLogo />
+
+				<h3>{{ title }}</h3>
+				<h4>{{ subtitle }}</h4>
+			</div>
+
+			<slot />
+		</section>
 	</div>
 </template>
+
 <style scoped>
-body {
+.auth-layout {
 	min-height: 100vh;
-	padding-top: 2rem;
 	display: flex;
+	background: var(--gray-light);
+	background: linear-gradient(180deg, var(--gradient-first) 0%, var(--gradient-second) 100%);
 	flex-direction: column;
-	gap: 2rem;
 	justify-content: center;
 	align-items: center;
-	background: linear-gradient(var(--gradient-first), var(--gradient-second));
+}
+
+.auth-section {
+	max-width: 400px;
+	background: var(--white);
+	padding: 2rem;
+	border-radius: 1rem;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+	width: 100%;
+}
+
+.auth-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	margin-bottom: 2rem;
+}
+
+.auth-header h3 {
+	font-size: 1.25rem;
+	font-weight: normal;
+	color: var(--primary);
+}
+
+.auth-header h4 {
+	font-size: 1rem;
+	color: var(--gray);
 }
 </style>
