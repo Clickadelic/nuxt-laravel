@@ -7,7 +7,7 @@ export default defineNuxtConfig({
 			apiBase: process.env.NUXT_PUBLIC_API_BASE
 		}
 	},
-	css: ["~/assets/css/style.css"],
+	css: ["~/assets/css/style.css", "~/assets/css/google-fonts.css"],
 	vite: {
 		server: {
 			watch: {
@@ -16,4 +16,4 @@ export default defineNuxtConfig({
 			}
 		}
 	}
-})
+});
