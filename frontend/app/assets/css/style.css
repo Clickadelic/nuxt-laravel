@@ -28,8 +28,6 @@ code,
 a,
 li,
 button {
-	font-family: "Rubik", sans-serif;
-	color: var(--primary);
 	font-size: 1rem;
 }
 

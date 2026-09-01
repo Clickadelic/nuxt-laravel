@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import HeroSection from "./HeroSection.vue";
+// console.log("App Header component loaded");
 </script>
 
 <template>
@@ -61,14 +61,6 @@ import HeroSection from "./HeroSection.vue";
 .header-navigation li a:hover,
 .header-navigation li a:focus {
 	color: var(--gradient-second);
-}
-
-.hero-section {
-	font-size: 2rem;
-	background: var(--white);
-	color: var(--white);
-	max-width: 1280px;
-	margin: 0 auto;
 }
 
 @media (max-width: 1280px) {

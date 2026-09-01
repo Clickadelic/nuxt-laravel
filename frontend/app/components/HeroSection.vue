@@ -1,15 +1,20 @@
 <template>
 	<section class="hero-section">
-		<h1>Die beste Art Software zu nutzen ist, wenn Sie Dir gehört.</h1>
+		<h2>Die beste Art Software zu nutzen ist, wenn Sie Dir gehört.</h2>
 	</section>
 </template>
 
 <style scoped>
 .hero-section {
 	font-size: 2rem;
-	background: var(--white);
 	color: var(--white);
-	max-width: 1280px;
+	max-width: 1440px;
 	margin: 0 auto;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+h2 {
+	color: var(--white);
+	font-size: 52px;
 }
 </style>
