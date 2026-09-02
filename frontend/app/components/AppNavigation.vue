@@ -1,8 +1,27 @@
+<script setup lang="ts">
+const { user, logout } = useAuth();
+
+const handleLogout = async () => {
+	await logout();
+	await navigateTo("/auth/login");
+};
+</script>
+
 <template>
 	<nav>
 		<ul class="header-navigation">
-			<li><NuxtLink to="/auth/register" title="Registrieren">Registrieren</NuxtLink></li>
-			<li><NuxtLink to="/auth/login" title="Login">Login</NuxtLink></li>
+			<template v-if="user">
+				<li><NuxtLink to="/dashboard" title="Dashboard">Dashboard</NuxtLink></li>
+				<li>
+					<button type="button" class="nav-link-button" @click="handleLogout">
+						Logout
+					</button>
+				</li>
+			</template>
+			<template v-else>
+				<li><NuxtLink to="/auth/register" title="Registrieren">Registrieren</NuxtLink></li>
+				<li><NuxtLink to="/auth/login" title="Login">Login</NuxtLink></li>
+			</template>
 		</ul>
 	</nav>
 </template>
@@ -30,6 +49,22 @@
 }
 .header-navigation li a:hover,
 .header-navigation li a:focus {
+	color: var(--primary);
+	text-decoration: underline;
+}
+
+.nav-link-button {
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	color: var(--secondary);
+	font-size: 1.25rem;
+}
+
+.nav-link-button:hover,
+.nav-link-button:focus {
 	color: var(--primary);
 	text-decoration: underline;
 }
