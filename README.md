@@ -33,6 +33,8 @@ Configure these production environment secrets in GitHub:
 
 Upload the production Laravel `.env` directly to `DEPLOY_BACKEND_PATH` on the server. The deployment preserves that file and uses its MySQL settings, including `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`.
 
+That production `.env` must also set `SANCTUM_STATEFUL_DOMAINS` to the frontend's domain (e.g. `demo.tobias-hopp.de`), otherwise Sanctum treats requests from the SPA as stateless and any controller call to `$request->session()` (login/register/logout) fails with a 500 ("Session store not set on request."). If the frontend and API live on different subdomains, also set `SESSION_DOMAIN` to their shared parent domain (e.g. `.tobias-hopp.de`) so the session/XSRF cookies are readable across both. After changing `.env` on the server, run `php artisan config:cache` to apply it.
+
 The web server must map `/api` on the subdomain to Laravel's `backend/public/index.php`, or provide a separate API host and set `NUXT_PUBLIC_API_BASE` accordingly. Standard webspace should not be assumed to run Docker; the local Compose setup remains for development.
 
 ## Stop the stack
