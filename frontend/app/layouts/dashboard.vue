@@ -30,15 +30,20 @@ const handleLogout = async () => {
 
 <style scoped>
 .dashboard-sidebar {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	height: 100vh;
-	width: 64rem;
+	width: 16rem;
 	background-color: var(--gray-light);
+	background-color: red;
 }
 
 .dashboard-header {
+	position: fixed;
+	top: 0;
+	left: 16rem;
+	width: calc(100vw - 16rem);
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
