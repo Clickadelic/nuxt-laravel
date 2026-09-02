@@ -38,4 +38,18 @@ p {
 p:first-of-type {
 	margin-bottom: 1rem;
 }
+
+a:link,
+a:visited {
+	color: var(--primary);
+}
+a:hover,
+a:focus {
+	text-decoration: underline;
+	color: var(--secondary);
+}
+
+p.small {
+	font-size: 0.7rem;
+}
 </style>
