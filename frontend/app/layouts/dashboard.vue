@@ -5,16 +5,27 @@ const handleLogout = async () => {
 	await logout();
 	await navigateTo("/auth/login");
 };
+
+const handleToggle = () => {
+	const sidebar = document.querySelector(".dashboard-sidebar") as HTMLElement;
+	const content = document.querySelector(".dashboard-content") as HTMLElement;
+	const header = document.querySelector(".dashboard-header") as HTMLElement;
+
+	if (sidebar && content && header) {
+		sidebar.classList.toggle("collapsed");
+		content.classList.toggle("collapsed");
+		header.classList.toggle("collapsed");
+	}
+};
 </script>
 
 <template>
 	<div class="dashboard-layout">
 		<aside class="dashboard-sidebar">
-			<h2>Sidebar</h2>
+			<AppLogo />
 		</aside>
 		<header class="dashboard-header">
-			<AppLogo />
-
+			<button @click="handleToggle">Toggle Sidebar</button>
 			<div class="dashboard-header-actions">
 				<!-- Client-only: user's name is never known during SSR (see AppNavigation.vue). -->
 				<ClientOnly>
@@ -24,19 +35,26 @@ const handleLogout = async () => {
 			</div>
 		</header>
 
-		<slot />
+		<main class="dashboard-content">
+			<slot />
+		</main>
 	</div>
 </template>
 
 <style scoped>
+body {
+	margin: 0;
+	font-family: var(--font-family);
+	background: var(--white);
+}
+
 .dashboard-sidebar {
 	position: fixed;
 	top: 0;
 	left: 0;
 	height: 100vh;
 	width: 16rem;
-	background-color: var(--gray-light);
-	background-color: red;
+	background-color: var(--gray);
 }
 
 .dashboard-header {
@@ -49,6 +67,12 @@ const handleLogout = async () => {
 	justify-content: space-between;
 	align-items: center;
 	padding: 1rem 2rem;
+}
+
+.dashboard-content {
+	margin-left: 16rem;
+	margin-top: 4rem;
+	padding: 2rem;
 }
 
 .dashboard-header-actions {
@@ -70,5 +94,18 @@ const handleLogout = async () => {
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
+}
+
+.dashboard-sidebar.collapsed {
+	width: 4rem;
+}
+
+.dashboard-header.collapsed {
+	left: 4rem;
+	width: calc(100vw - 4rem);
+}
+
+.dashboard-content.collapsed {
+	margin-left: 4rem;
 }
 </style>
