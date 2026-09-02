@@ -2,7 +2,17 @@
 export default defineNuxtConfig({
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true, vscode: {} },
-
+	vite: {
+		server: {
+			hmr: {
+				clientPort: 3000
+			},
+			watch: {
+				usePolling: true,
+				interval: 100
+			}
+		}
+	},
 	runtimeConfig: {
 		public: {
 			apiBase: process.env.NUXT_PUBLIC_API_BASE
@@ -18,13 +28,5 @@ export default defineNuxtConfig({
 				dir: "./app/assets/images/svg" // path to folder (since V4 [app directory introduced])
 			}
 		]
-	},
-	vite: {
-		server: {
-			watch: {
-				usePolling: true,
-				interval: 100
-			}
-		}
 	}
 });
