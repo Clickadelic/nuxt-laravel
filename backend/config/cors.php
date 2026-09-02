@@ -10,8 +10,8 @@ return [
 	'allowed_methods' => ['*'],
 
 	'allowed_origins' => [
-		'http://localhost:3000',
-		'https://demo.tobias-hopp.de',
+		env('FRONTEND_PRODUCTION_URL'),
+		env('FRONTEND_DEV_URL'),
 	],
 
 	'allowed_origins_patterns' => [],
