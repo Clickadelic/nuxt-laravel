@@ -5,7 +5,9 @@
 <template>
 	<div class="default-layout">
 		<AppHeader />
-		<slot />
+		<main class="container">
+			<slot />
+		</main>
 		<AppFooter />
 	</div>
 </template>

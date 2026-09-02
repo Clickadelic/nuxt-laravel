@@ -33,6 +33,7 @@ const subtitle = computed(() => route.meta.authSubtitle as string);
 
 .auth-section {
 	max-width: 400px;
+	min-width: 260px;
 	background: var(--white);
 	padding: 2rem;
 	border-radius: 1rem;
