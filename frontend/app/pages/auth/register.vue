@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
 	layout: "auth",
+	guestOnly: true,
 	authTitle: "Erstelle einen Account",
 	authSubtitle: "Registrieren"
 });

@@ -9,14 +9,15 @@ const handleLogout = async () => {
 
 <template>
 	<div class="dashboard-layout">
+		<aside class="dashboard-sidebar">
+			<h2>Sidebar</h2>
+		</aside>
 		<header class="dashboard-header">
 			<AppLogo />
 
 			<div class="dashboard-header-actions">
 				<span v-if="user" class="dashboard-user">{{ user.name }}</span>
-				<button type="button" class="logout-button" @click="handleLogout">
-					Logout
-				</button>
+				<button type="button" class="logout-button" @click="handleLogout">Logout</button>
 			</div>
 		</header>
 
@@ -25,6 +26,15 @@ const handleLogout = async () => {
 </template>
 
 <style scoped>
+.dashboard-sidebar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 64rem;
+	background-color: var(--gray-light);
+}
+
 .dashboard-header {
 	display: flex;
 	flex-direction: row;
@@ -54,4 +64,3 @@ const handleLogout = async () => {
 	cursor: pointer;
 }
 </style>
-
