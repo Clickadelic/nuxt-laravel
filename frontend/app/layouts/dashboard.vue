@@ -16,7 +16,10 @@ const handleLogout = async () => {
 			<AppLogo />
 
 			<div class="dashboard-header-actions">
-				<span v-if="user" class="dashboard-user">{{ user.name }}</span>
+				<!-- Client-only: user's name is never known during SSR (see AppNavigation.vue). -->
+				<ClientOnly>
+					<span v-if="user" class="dashboard-user">{{ user.name }}</span>
+				</ClientOnly>
 				<button type="button" class="logout-button" @click="handleLogout">Logout</button>
 			</div>
 		</header>

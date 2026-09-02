@@ -9,20 +9,35 @@ const handleLogout = async () => {
 
 <template>
 	<nav>
-		<ul class="header-navigation">
-			<template v-if="user">
-				<li><NuxtLink to="/dashboard" title="Dashboard">Dashboard</NuxtLink></li>
-				<li>
-					<button type="button" class="nav-link-button" @click="handleLogout">
-						Logout
-					</button>
-				</li>
+		<ClientOnly>
+			<ul class="header-navigation">
+				<template v-if="user">
+					<li><NuxtLink to="/dashboard" title="Dashboard">Dashboard</NuxtLink></li>
+					<li>
+						<button type="button" class="nav-link-button" @click="handleLogout">
+							Logout
+						</button>
+					</li>
+				</template>
+				<template v-else>
+					<li><NuxtLink to="/auth/register" title="Registrieren">Registrieren</NuxtLink></li>
+					<li><NuxtLink to="/auth/login" title="Login">Login</NuxtLink></li>
+				</template>
+			</ul>
+
+			<!--
+				Auth state is only known on the client (session cookie), so the
+				real nav is client-only. The fallback below matches the logged-out
+				markup, which is what the server always renders anyway, avoiding a
+				flash of empty nav for the common logged-out case.
+			-->
+			<template #fallback>
+				<ul class="header-navigation">
+					<li><NuxtLink to="/auth/register" title="Registrieren">Registrieren</NuxtLink></li>
+					<li><NuxtLink to="/auth/login" title="Login">Login</NuxtLink></li>
+				</ul>
 			</template>
-			<template v-else>
-				<li><NuxtLink to="/auth/register" title="Registrieren">Registrieren</NuxtLink></li>
-				<li><NuxtLink to="/auth/login" title="Login">Login</NuxtLink></li>
-			</template>
-		</ul>
+		</ClientOnly>
 	</nav>
 </template>
 <style scoped>
