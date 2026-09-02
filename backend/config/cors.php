@@ -10,7 +10,7 @@ return [
 	'allowed_methods' => ['*'],
 
 	'allowed_origins' => [
-		env('FRONTEND_URL'),
+		env('FRONTEND_PRODUCTION_URL'),
 		env('FRONTEND_DEV_URL'),
 	],
 
