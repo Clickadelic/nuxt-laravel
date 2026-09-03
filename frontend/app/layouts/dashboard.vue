@@ -42,9 +42,9 @@ const handleToggle = () => {
 </template>
 
 <style scoped>
-body {
+.dashboard-layout {
 	margin: 0;
-	font-family: var(--font-family);
+	height: calc(100vh - 4rem);
 	background: var(--white);
 }
 
@@ -54,7 +54,8 @@ body {
 	left: 0;
 	height: 100vh;
 	width: 16rem;
-	background-color: var(--gray);
+	padding-top: 1rem;
+	background-color: var(--gray-light);
 }
 
 .dashboard-header {
@@ -67,7 +68,7 @@ body {
 	justify-content: space-between;
 	align-items: center;
 	padding: 1rem 2rem;
-	background-color: var(--gray);
+	background-color: var(--gray-light);
 }
 
 .dashboard-content {
